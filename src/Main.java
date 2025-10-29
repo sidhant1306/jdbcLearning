@@ -5,7 +5,7 @@ public class Main {
     private static final String url = "jdbc:mysql://127.0.0.1:3306/school";
     private static final String username = "root";
     private static final String password = "Sonam@1108";
-    public static void main(String[] args) {
+     static void main(String[] args) {
         try{
             Class.forName("com.mysql.cj.jdbc.Driver");
         }
@@ -70,7 +70,7 @@ public class Main {
                 int id = resultSet.getInt("id");
                 String name = resultSet.getString("name");
                 int age = resultSet.getInt("age");
-                Double marks = resultSet.getDouble("marks");
+                double marks = resultSet.getDouble("marks");
 
                 System.out.println("ID : " +id );   // it's in a while loop, so we are printing the data for each student.
                 System.out.println("name : " +name);
@@ -129,7 +129,7 @@ public class Main {
                 int emp_id = result.getInt("emp_id");
                 String emp_name = result.getString("emp_name");
                 int emp_age = result.getInt("emp_age");
-                Double emp_salary = result.getDouble("emp_salary");
+                double emp_salary = result.getDouble("emp_salary");
                 System.out.println(" ** Next employee : ");
                 System.out.println("employee id : " + emp_id);
                 System.out.println("employee name : " + emp_name);
