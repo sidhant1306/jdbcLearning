@@ -1,6 +1,7 @@
 import com.mysql.cj.x.protobuf.MysqlxCrud;
 
 import java.sql.*;
+import java.util.Scanner;
 
 public class prepared {
     // DATABASE USED IS "house";
@@ -116,7 +117,79 @@ public class prepared {
 
 
             // ************************************* TAKING INPUTS FROM THE USER ************************************
+            // ************************************* BATCH PROCESSING **********************************************
+            // using a new table friends :
 
+            // drop the previously created table, when we ran the code on intellij again:
+
+            String DropTable = "DROP TABLE IF EXISTS friends";
+            PreparedStatement dropPrep = connection.prepareStatement(DropTable);
+
+            int droppingTable = dropPrep.executeUpdate();
+            if(droppingTable > 0) {
+                System.out.println("Table deleted");
+            }else System.out.println("Table does not exists");
+
+            // CREATING THE TABLE:
+
+            String createTable = "CREATE TABLE IF NOT EXISTS friends" +
+                                    "(name VARCHAR(50) NOT NULL," +
+                                        "age INT NOT NULL, " +
+                                            "marks INT NOT NULL);";
+
+            PreparedStatement createPrep = connection.prepareStatement(createTable);
+            int tableCreated = createPrep.executeUpdate();
+            if(tableCreated > 0) System.out.println("Table created");
+            else System.out.println("Table already exists.");
+
+            // NOW TAKING **** INPUT **** FROM THE USER: ( using normal statement class, not prepared statement):
+            Statement statement = connection.createStatement();
+            Scanner sc = new Scanner(System.in);
+            while(true) {
+                System.out.println("Enter name: ");
+                String name = sc.next();
+
+                System.out.println("Enter age: ");
+                int age = sc.nextInt();
+
+                System.out.println("Enter marks: ");
+                int marks = sc.nextInt();
+
+                String insertFriends = String.format("INSERT INTO friends(name, age, marks) VALUES ('%s' , %d , %d)", name, age, marks);
+                statement.addBatch(insertFriends);
+
+                System.out.println("Do you want to insert more entries? : Y/N ");
+                String continueInserting = sc.next();
+                if(continueInserting.toUpperCase().equals("N")){
+                    break;
+                }
+            }
+
+
+            int[] arr = statement.executeBatch();   // till here the batch is executed.
+            // to check if there is any query which could not be executed :
+            for (int i = 0; i < arr.length; i++) {
+                if(arr[i] == 0) System.out.println("query number : " +i + "could not be executed");
+            }
+
+            // you can see if the batch was executed:
+            System.out.println("Checking if the input data was inserted in the friends table : ");
+            String printTable = "SELECT * FROM friends";
+            Statement printStatement = connection.createStatement();
+            ResultSet printFriends = printStatement.executeQuery(printTable);
+
+            while(printFriends.next()){
+                System.out.println("name: " +printFriends.getString("name"));
+                System.out.println("age : " +printFriends.getInt("age"));
+                System.out.println("marks: " +printFriends.getInt("marks"));
+            }
+
+        // NOW WE CAN DO THE SAME THING USING PREPARED STATEMENTS AS WELL.
+        // just add this in the while loop :
+            // preparedStatement.setString(1, name);
+            // preparedStatement.setInt(2, age);
+            // preparedStatement.setInt(3, marks);
+        // and replace statement with prepared statement.
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
