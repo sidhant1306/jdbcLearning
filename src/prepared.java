@@ -1,4 +1,3 @@
-import com.mysql.cj.x.protobuf.MysqlxCrud;
 
 import java.sql.*;
 import java.util.Scanner;
@@ -160,7 +159,7 @@ public class prepared {
 
                 System.out.println("Do you want to insert more entries? : Y/N ");
                 String continueInserting = sc.next();
-                if(continueInserting.toUpperCase().equals("N")){
+                if(continueInserting.equalsIgnoreCase("N")){
                     break;
                 }
             }
