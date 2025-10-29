@@ -7,7 +7,7 @@ public class transactionHandling {
     private static final String username = "root";
     private static final String password = "Sonam@1108";
 
-   public static void main(String[] args) {
+    static void main(String[] args) {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
